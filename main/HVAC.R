@@ -39,7 +39,7 @@ GRS.HVAC <- function(GRS.input, traits, chr, sums_p, base_pop, target_pop,
       if(!file.exists(paste0(temp_p,"/",vax_methods,".done.",traits,"_",chr))){
         cat("Start VAX_M1 model\n")
         vax_m1 <- paste0(
-          "python /data2/projects/bioinfo/zhshao/GRS/VAX/bin/vac",
+          "python /data2/projects/bioinfo/zhshao/GRS/VAX/bin/hvac",
           # " -l /data2/projects/bioinfo/zhshao/LD_reference/UKB/VAX/",target_pop,"/chr_",chr,
           " -l /data2/projects/bioinfo/zhshao/LD_reference/1000G/VAX/",target_pop,"/chr_",chr,
           " -s ",sums_p,traits,".fastGWA",
@@ -151,7 +151,7 @@ GRS.HVAC <- function(GRS.input, traits, chr, sums_p, base_pop, target_pop,
       if(!file.exists(paste0(temp_p,"/",vax_methods,".done.",traits,"_",chr))){
         cat("Start VAX_M2 model\n")
         vax_m2 <- paste0(
-          "python /data2/projects/bioinfo/zhshao/GRS/VAX/bin/vac",
+          "python /data2/projects/bioinfo/zhshao/GRS/VAX/bin/hvac",
           # " -l /data2/projects/bioinfo/zhshao/LD_reference/UKB/VAX/",base_pop,"/chr_",chr,
           " -l /data2/projects/bioinfo/zhshao/LD_reference/1000G/VAX/",base_pop,"/chr_",chr,
           " -s ",base_sums_p,base_traits,".fastGWA",
