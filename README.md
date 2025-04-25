@@ -123,49 +123,44 @@ Below is an example of running the OmniPRS package:
 R 4.1.2
 
 # Set parameters
-base_p <- "/data2/projects/bioinfo/1KG/"
-base_f <- "eur_hm3_chr"
-target_p <- "/data2/projects/bioinfo/UKB/"
-target_f <- "ukb22828_eur_hm3_chr"
-pheno <- "/data2/projects/bioinfo/ukbb.phen"
-temp <- "/data2/projects/bioinfo/temp_ukb/"
-cova <- c("BaseAge", "Sexgenetic", paste0("PC", 1:10))
-traits <- "Height"
-bina <- FALSE
-sums_p <- "/data2/projects/bioinfo/sums/"
-out <- "/data2/projects/bioinfo/out/"
-phe_trait <- traits
-print(traits)
+ base_p = "/data2/projects/bioinfo/zhshao/ukb5keur/"
+base_f = "ukb22828_eur_refld_chr"
+target_p = "/data2/projects/bioinfo/zhshao/UKB_hm3eur/"
+target_f = "ukb22828_eur_hm3_chr"
+pheno = "/data2/projects/bioinfo/zhshao/GRS/ukbb.phen"
+temp = "/data2/projects/bioinfo/zhshao/GRS/temp/"
+cova = c("BaseAge","Sexgenetic",paste0("PC",1:10))
+
+traits = c("Height_AFR")[taa]
+
+bina = F
+sums_p = "/data2/projects/bioinfo/zhshao/GWAS.summary/sums/GIANT/"
+
+out = "/home/zhshao/project/GRS/111_result/1-quan/"
+phe_trait = strsplit(traits,"_")[[1]][1]; print(traits)
+base_pop = "EUR"
+target_pop = strsplit(traits,"_")[[1]][2]
+base_p = paste0("/data2/projects/bioinfo/zhshao/LD_reference/1000G/1KG/",tolower(strsplit(traits,"_")[[1]][2]),"/")
+base_f = "hm3_cM_chr"
+target_p = paste0("/data2/projects/bioinfo/zhshao/LD_reference/UKB/genotype/",
+                  strsplit(traits,"_")[[1]][2],"/")
+target_f = "ukb_hm3_chr"
+pheno = paste0("/data2/projects/bioinfo/zhshao/GRS/ukbb_",tolower(strsplit(traits,"_")[[1]][2]),".phen")
 
 # Set GWAS summary file path
 sums_p <- paste0(sums_p, traits, "/")
 
 # Run HVAC for each chromosome
 for (chr in 1:22) {
-  HVAC(traits, chr, sums_p,
-    base_p, base_f, cova, target_p, target_f,
-    pheno, phe_trait, out, temp, bina)
+  HVAC(GRS.input, traits, chr, sums_p, base_pop, target_pop,
+                    base_p, base_f,target_p, target_f,cova = NULL,
+                    sums_out="/data2/projects/bioinfo/zhshao/GWAS.summary/cross_pop/",
+                    pheno, phe_trait, out, temp, bina = F)
 }
 ```
 
-### 3.4 Output Files
-
-#### 3.4.1 Posterior Estimates of Effect Sizes ("OmniPRS_beta")
-
-- **Column 1**: SNP ID
-- **Column 2**: Minor allele name
-- **Columns 3-13**: Posterior estimates of tissue-specific effect sizes for each tissue
-
-#### 3.4.2 Polygenic Risk Scores for Validation Set Individuals ("OmniPRS_score")
-
-- **Column 1**: Individual ID
-- **Columns 2-12**: Tissue-specific polygenic risk scores for each tissue
-- **Column 13**: Polygenic risk score using the EW algorithm
-- **Column 14**: Polygenic risk score using the LASSO algorithm
-- **Column 15**: Polygenic risk score using the BMA algorithm
-
 ## Acknowledgments
-Special thanks to Shadi[https://github.com/shz9/viprs] for providing the foundational code for this software.
+Special thanks to Shadi [https://github.com/shz9/viprs] for providing the foundational code for this software.
 
 ## Contact
 We are very grateful to any questions, comments, or bugs reports; and please contact [Zhonghe Shao](https://github.com/biostatShao) via zhonghe@hust.edu.cn.
