@@ -7,27 +7,52 @@ Hierarchical Bayesian model with Variational inference and functional Annotation
 We introduce HVAC  (Hierarchical Bayesian model with Variational inference and functional Annotation integration for Cross-ancestry prediction), a novel cross-population PRS framework employing a three-tiered Bayesian architecture that facilitates coordinated information transfer across diverse populations. The hierarchical structure operates through three functionally integrated components. Firstly, an ancestry-specific inference layer employing annotation-informed Gaussian mixture models to derive population-specific variational posteriors, addressing localized linkage disequilibrium patterns while enabling regularized parameter sharing. Secondly, a cross-ancestry calibration layer utilizing dynamic beta-shrinkage priors that bidirectionally propagate uncertainty estimates across populations, thereby balancing ancestral specificity with shared genetic architecture. Thirdly, polygenic synthesis layer integrating population-specific and cross-ancestry signals through an ensemble super-learner approach with genotype-optimized weighting, employing stacked regression to enhance generalizability while reducing ancestry-related overfitting.
 
 # 2 Installation Instructions
+Our software is built on Python version 3.8 or later. To ensure optimal performance and compatibility, we strongly recommend creating a dedicated environment using Conda before installation.
+### 2.1 Setting Up the Environment
+1. Install Conda: If you do not have Conda installed, download and install it from the official Conda website (https://repo.anaconda.com/archive/index.html).
+2. Create a Conda Environment:
+```python
 conda create -n hvac python=3.11
-The HVAC package does not require installation and can be directly invoked. Before use, set the working directory to the location of the software:
-```r
-setwd("/your/path/")
-require(data.table)
-require(magrittr)
-require(rhdf5)
-require(BAS)
-require(glmnet)
 ```
-Then, in the R environment, load the OmniPRS package by entering:
-```r
-source("/your/path/OmniPRS.R")
+3. Activate the Environment:
+```python
+conda activate hvac
 ```
+4. Installing Dependencies:
+Install `magenpy` using pip
+```python
+pip install magenpy
+```
+### 2.2 Building Extensions
+1. Ensure the Conda environment is activated.
+2. Navigate to the directory containing the setup.py file for the software.
+3. Run the following command to build the extensions in place:
+```python
+python setup.py build_ext --inplace
+```
+
 ## 3 Usage Instructions
 
 ### 3.1 Input Files
 
-#### 3.1.1 Plink Files
+#### 3.1.1 Compute Linkage-Disequilibrium (LD) matrices using `magenpy`
 
-Each chromosome corresponds to a set of Plink files (binary PED format). These files are used as the LD reference panel and are later used to compute PRS.
+The magenpy_ld script is used to compute Linkage-Disequilibrium (LD) matrices, which record the pairwise SNP-by-SNP correlations from a sample of genotype data stored in plink's BED format. The script offers an interface to compute LD matrices by simply specifying the path to the genotype files, the type of LD estimator to use, the subset of variants or samples to keep, and the output directory.
+The command processes genotype data for chromosome 1 of the EAS population：
+```python
+/home/bin/magenpy_ld \
+    --bfile ./1KG/sas/hm3_cM_chr1 \
+    --min-mac 5 \
+    --backend xarray \
+    --estimator block \
+    --ld-blocks ./EAS_block_coords.bed \
+    --storage-dtype int16 \
+    --compressor zstd \
+    --compression-level 9 \
+    --compute-spectral-properties \
+    --temp-dir ./temp \
+    --output-dir ./SAS/
+```
 
 #### 3.1.2 Annotation File
 
@@ -115,9 +140,9 @@ print(traits)
 # Set GWAS summary file path
 sums_p <- paste0(sums_p, traits, "/")
 
-# Run OmniPRS for each chromosome
+# Run HVAC for each chromosome
 for (chr in 1:22) {
-  OmniPRS(traits, chr, sums_p,
+  HVAC(traits, chr, sums_p,
     base_p, base_f, cova, target_p, target_f,
     pheno, phe_trait, out, temp, bina)
 }
@@ -140,10 +165,7 @@ for (chr in 1:22) {
 - **Column 15**: Polygenic risk score using the BMA algorithm
 
 ## Acknowledgments
-We refer to the preprocessor of GWAS data in LDpred.funct software developed by Carla Márquez-Luna for this software.
-
-## Citations
-Zhonghe Shao, Wangxia Tang, Hongji Wu, Yifan Kong, Xingjie Hao* (2024). lncorporating multiple functional annotations to improve polygenic risk prediction accuracy, Cell Genomics (2025), [https://doi.org/10.1016/i.xgen.2025.100850](https://doi.org/10.1016/j.xgen.2025.100850)
+Special thanks to Shadi[https://github.com/shz9/viprs] for providing the foundational code for this software.
 
 ## Contact
 We are very grateful to any questions, comments, or bugs reports; and please contact [Zhonghe Shao](https://github.com/biostatShao) via zhonghe@hust.edu.cn.
