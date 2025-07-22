@@ -166,4 +166,4 @@ Special thanks to Shadi [https://github.com/shz9/viprs] for providing the founda
 We are very grateful to any questions, comments, or bugs reports; and please contact [Zhonghe Shao](https://github.com/biostatShao) via zhonghe@hust.edu.cn.
 
 ## Update
-2024-06-17 OmniPRS version 1.0.0
+2024-12-02 HVAC version 0.0.1
